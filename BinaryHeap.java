@@ -1,56 +1,60 @@
 public class BinaryHeap {
     private int[] array;
+    private int current;
     private int size;
-    private int max;
 
     public BinaryHeap() {
-        this.size = 0;
-        this.max = 10000;
-        this.array = new int[max];
+        this.current = 0;
+        this.size = 10;
+        this.array = new int[size];
     }
 
-    void add(int addingItem){
-        size++;
-        array[size] = addingItem;
-        int item = size;
-
-        while(array[item] < array[parent(item)]){
-            swap(item, parent(item));
-            item = parent(item);
+    void add(int element){
+        current++;
+        if(current >= size){
+            int[] temp = new int[size*2];
+            for(int i = 0; i < current; i++){
+                temp[i] = array[i];
+            }
+            array = temp;
+            size *= 2;
+        }
+        else {
+            array[current] = element;
+            int item = current;
+            while (array[item] < array[item / 2]) {
+                swap(item, item / 2);
+                item = item / 2;
+            }
         }
     }
 
     int remove(){
-        swap(1, size);
-        size--;
-        if(size != 0) {
+        swap(1, current);
+        current--;
+        if(current != 0) {
             shiftDown(1);
         }
-        return array[size+1];
+        return array[current +1];
     }
 
     void shiftDown(int index){
-        while(!isLeaf(index)){
-            int child = 2 * index;
 
-            if((child < size) && (array[child] > array[child+1])){
-                child = child + 1;
-            }
-
-            if(array[index] <= array[child]){
-                return;
-            }
-            swap(index, child);
-            index = child;
+        if((index > current /2) && (index <= current)){
+            return;
         }
-    }
 
-    boolean isLeaf(int index){
-        return ((index > size/2) && (index <= size));
-    }
+        int child = 2 * index;
 
-    private int parent(int item) {
-        return (item/2);
+        if((child < current) && (array[child] > array[child+1])){
+            child = child + 1;
+        }
+
+        if(array[index] <= array[child]){
+            return;
+        }
+        swap(index, child);
+        shiftDown(child);
     }
 
     void swap(int val1, int val2){
