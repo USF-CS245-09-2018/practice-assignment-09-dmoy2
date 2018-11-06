@@ -58,7 +58,7 @@ public class BinaryHeap {
         // else keep track of child
         int child = 2 * index;
 
-        // sort child to where it needs to be by comparing children and swapping with lesser of children 
+        // sort child to where it needs to be by comparing children and swapping with lesser of children
         if((child < current) && (array[child] > array[child+1])){
             child = child + 1;
         }
